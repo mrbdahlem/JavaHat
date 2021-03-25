@@ -54,7 +54,8 @@ public class JavaHat {
     }
     
     /**
-     * Turn off the NeoPixel LEDs, setting their RGB values to 0
+     * Turn off the NeoPixel LEDs, setting their RGB values to 0. The neoPixels
+     * do not wait for updatePixels() to be called.
      */
     public void neoPixelsOff() {
         neoPixelDriver.allOff();
@@ -82,7 +83,7 @@ public class JavaHat {
      * @param hat the physical hardware
      */
     private static void pixelTest(JavaHat hat) {
-        System.out.println("Rainbow Colours");
+        System.out.println("Rainbow Colors");
 
         int[] colours = PixelColour.RAINBOW;
         Pixel[] pixels = hat.getNeoPixels();
