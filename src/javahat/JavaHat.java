@@ -12,10 +12,16 @@ import com.diozero.ws281xj.rpiws281x.WS281x;
 public class JavaHat {
     
     /* I/O Constants */
-    /** The pin the neopixels are connected to */
+    /** The pin the NeoPixels are connected to */
     public static final int PIXELS_GPIO = 12;
-    /** The number of neopixels on the hat */
+    /** The number of NeoPixels on the hat */
     public static final int NUM_PIXELS = 10;
+    
+    public static final int DPAD_UP_GPIO = 26;
+    public static final int DPAD_DOWN_GPIO = 6;
+    public static final int DPAD_LEFT_GPIO = 13;
+    public static final int DPAD_RIGHT_GPIO = 20;
+    public static final int DPAD_CENTER_GPIO = 16;
     
     /* Settings */
     private static final int PIXEL_BRIGHTNESS = 64;
@@ -23,6 +29,7 @@ public class JavaHat {
     /* Instance variables */
     private final Pixel[] neoPixels;
     private final LedDriverInterface neoPixelDriver;
+    private final DPad dpad;
     
     /*
      There is only one hat connection, so only allow a single instance
@@ -38,6 +45,9 @@ public class JavaHat {
         for (int i = 0; i < neoPixels.length; i++) {
             neoPixels[i] = new LedPixel(neoPixelDriver, i);
         }
+        
+        dpad = new DPad(DPAD_UP_GPIO, DPAD_DOWN_GPIO, DPAD_LEFT_GPIO, 
+                DPAD_RIGHT_GPIO, DPAD_CENTER_GPIO);
     }
     
     /**
@@ -75,6 +85,14 @@ public class JavaHat {
      */
     public void updatePixels() {
         neoPixelDriver.render();
+    }
+    
+    /**
+     * Retrieve the instance of the dpad on the hat
+     * @return the dpad on the hat
+     */
+    public DPad getDpad() {
+        return dpad;
     }
 
     /**
@@ -150,5 +168,52 @@ public class JavaHat {
         
         // Demo the neoPixels on the hat
         pixelTest(hat);
+//        
+//        // Demo the DPad
+//        
+//        DPad dpad = hat.getDpad();
+//        boolean centerPressed = false;
+//        Pixel[] pixels = hat.getNeoPixels();
+//        hat.neoPixelsOff();
+//        
+//        while (!centerPressed) {
+//            if (dpad.upPressed()) {
+//                pixels[0].setRed(255);
+//            }
+//            else {
+//                pixels[0].setRed(0);
+//            }
+//            
+//            if (dpad.downPressed()) {
+//                pixels[1].setGreen(255);
+//            }
+//            else {
+//                pixels[1].setGreen(0);
+//            }
+//            
+//            if (dpad.leftPressed()) {
+//                pixels[2].setBlue(255);
+//            }
+//            else {
+//                pixels[2].setBlue(0);
+//            }
+//            
+//            if (dpad.rightPressed()) {
+//                pixels[3].setRed(255);
+//            }
+//            else {
+//                pixels[3].setRed(0);
+//            }
+//            
+//            if (dpad.centerPressed()) {
+//                pixels[4].setGreen(255);
+//                centerPressed = true;
+//            }
+//            else {
+//                pixels[4].setGreen(0);
+//            }
+//            
+//            hat.updatePixels();
+//        }
     }
 }
