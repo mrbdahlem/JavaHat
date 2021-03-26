@@ -17,11 +17,14 @@ public class JavaHat {
     /** The number of NeoPixels on the hat */
     public static final int NUM_PIXELS = 10;
     
-    public static final int DPAD_UP_GPIO = 26;
-    public static final int DPAD_DOWN_GPIO = 6;
-    public static final int DPAD_LEFT_GPIO = 13;
-    public static final int DPAD_RIGHT_GPIO = 20;
+    public static final int DPAD_UP_GPIO = 6;
+    public static final int DPAD_DOWN_GPIO = 26;
+    public static final int DPAD_LEFT_GPIO = 20;
+    public static final int DPAD_RIGHT_GPIO = 13;
     public static final int DPAD_CENTER_GPIO = 16;
+    
+    public static final int A_BUTTON_GPIO = 24;
+    public static final int B_BUTTON_GPIO = 23;
     
     /* Settings */
     private static final int PIXEL_BRIGHTNESS = 64;
@@ -29,7 +32,7 @@ public class JavaHat {
     /* Instance variables */
     private final Pixel[] neoPixels;
     private final LedDriverInterface neoPixelDriver;
-    private final DPad dpad;
+    private final ButtonPad bpad;
     
     /*
      There is only one hat connection, so only allow a single instance
@@ -46,8 +49,8 @@ public class JavaHat {
             neoPixels[i] = new LedPixel(neoPixelDriver, i);
         }
         
-        dpad = new DPad(DPAD_UP_GPIO, DPAD_DOWN_GPIO, DPAD_LEFT_GPIO, 
-                DPAD_RIGHT_GPIO, DPAD_CENTER_GPIO);
+        bpad = new ButtonPad(DPAD_UP_GPIO, DPAD_DOWN_GPIO, DPAD_LEFT_GPIO, 
+                DPAD_RIGHT_GPIO, DPAD_CENTER_GPIO, A_BUTTON_GPIO, B_BUTTON_GPIO);
     }
     
     /**
@@ -88,11 +91,11 @@ public class JavaHat {
     }
     
     /**
-     * Retrieve the instance of the dpad on the hat
-     * @return the dpad on the hat
+     * Retrieve the instance of the controller on the hat
+     * @return the controller on the hat
      */
-    public DPad getDpad() {
-        return dpad;
+    public ButtonPad getButtonPad() {
+        return bpad;
     }
 
     /**
@@ -168,52 +171,83 @@ public class JavaHat {
         
         // Demo the neoPixels on the hat
         pixelTest(hat);
-//        
-//        // Demo the DPad
-//        
-//        DPad dpad = hat.getDpad();
-//        boolean centerPressed = false;
-//        Pixel[] pixels = hat.getNeoPixels();
-//        hat.neoPixelsOff();
-//        
-//        while (!centerPressed) {
-//            if (dpad.upPressed()) {
-//                pixels[0].setRed(255);
-//            }
-//            else {
-//                pixels[0].setRed(0);
-//            }
-//            
-//            if (dpad.downPressed()) {
-//                pixels[1].setGreen(255);
-//            }
-//            else {
-//                pixels[1].setGreen(0);
-//            }
-//            
-//            if (dpad.leftPressed()) {
-//                pixels[2].setBlue(255);
-//            }
-//            else {
-//                pixels[2].setBlue(0);
-//            }
-//            
-//            if (dpad.rightPressed()) {
-//                pixels[3].setRed(255);
-//            }
-//            else {
-//                pixels[3].setRed(0);
-//            }
-//            
-//            if (dpad.centerPressed()) {
-//                pixels[4].setGreen(255);
-//                centerPressed = true;
-//            }
-//            else {
-//                pixels[4].setGreen(0);
-//            }
-//            
-//            hat.updatePixels();
-//        }
+        
+        // Demo the ButtonPad
+        
+        ButtonPad controller = hat.getButtonPad();
+        Pixel[] pixels = hat.getNeoPixels();
+        hat.neoPixelsOff();
+        
+        System.out.println("Button test: (Press A + B to end)");
+        boolean endPressed = false;
+        
+        while (!endPressed) {
+            if (controller.upPressed()) {
+                pixels[0].setRed(255);
+            }
+            else {
+                pixels[0].setRed(0);
+            }
+            
+            if (controller.downPressed()) {
+                pixels[1].setGreen(255);
+            }
+            else {
+                pixels[1].setGreen(0);
+            }
+            
+            if (controller.leftPressed()) {
+                pixels[2].setBlue(255);
+            }
+            else {
+                pixels[2].setBlue(0);
+            }
+            
+            if (controller.rightPressed()) {
+                pixels[3].setRed(255);
+                pixels[3].setGreen(255);
+            }
+            else {
+                pixels[3].setRed(0);
+                pixels[3].setGreen(0);
+            }
+            
+            if (controller.centerPressed()) {
+                pixels[4].setGreen(255);
+                pixels[4].setBlue(255);
+            }
+            else {
+                pixels[4].setGreen(0);
+                pixels[4].setBlue(0);
+            }
+            
+            if (controller.aPressed()) {
+                pixels[5].setRed(255);
+                pixels[5].setBlue(255);
+            }
+            else {
+                pixels[5].setRed(0);
+                pixels[5].setBlue(0);
+            }
+            
+            if (controller.bPressed()) {
+                pixels[6].setRed(64);
+                pixels[6].setBlue(64);
+                pixels[6].setGreen(64);
+            }
+            else {
+                pixels[6].setRed(0);
+                pixels[6].setBlue(0);
+                pixels[6].setGreen(0);
+            }
+            
+            if (controller.aPressed() && controller.bPressed()) {
+                endPressed = true;
+            }
+            
+            hat.updatePixels();
+        }
+        
+        System.out.println("Button test done.");
     }
 }

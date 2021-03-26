@@ -12,24 +12,48 @@ import com.diozero.api.GpioPullUpDown;
  *
  * @author dahlem.brian
  */
-public class DPad {
+public class ButtonPad {
     private final DigitalInputDevice up;
     private final DigitalInputDevice down;
     private final DigitalInputDevice left;
     private final DigitalInputDevice right;
     private final DigitalInputDevice center;
     
+    private final DigitalInputDevice a;
+    private final DigitalInputDevice b;
     /** 
      * Construct a new DPad.
      * Note: the constructor is Package Private so only the hat constructor
      * can create an instance
      */
-    DPad(int upGpio, int downGpio, int leftGpio, int rightGpio, int centerGpio) {
-        up =  DigitalInputDevice.builder(upGpio).setPullUpDown(GpioPullUpDown.PULL_DOWN).build();
-        down = DigitalInputDevice.builder(downGpio).setPullUpDown(GpioPullUpDown.PULL_DOWN).build();
-        left = DigitalInputDevice.builder(leftGpio).setPullUpDown(GpioPullUpDown.PULL_DOWN).build();
-        right = DigitalInputDevice.builder(rightGpio).setPullUpDown(GpioPullUpDown.PULL_DOWN).build();
-        center = DigitalInputDevice.builder(centerGpio).setPullUpDown(GpioPullUpDown.PULL_DOWN).build();        
+    ButtonPad(int upGpio, int downGpio, int leftGpio, int rightGpio, 
+            int centerGpio, int aGpio, int bGpio) {
+        
+        up =  DigitalInputDevice.builder(upGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build();
+        down = DigitalInputDevice.builder(downGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build();
+        left = DigitalInputDevice.builder(leftGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build();
+        right = DigitalInputDevice.builder(rightGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build();
+        center = DigitalInputDevice.builder(centerGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build(); 
+        
+        a = DigitalInputDevice.builder(aGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build();
+        b = DigitalInputDevice.builder(bGpio).setPullUpDown(GpioPullUpDown.PULL_UP).build();
+    }
+    
+    
+    /**
+     * Determine if the A button is pressed.
+     * @return true if the A button is being pressed.
+     */
+    public boolean aPressed() {
+        return a.isActive();
+    }
+    
+    /**
+     * Determine if the B button is pressed.
+     * @return true if the B button is being pressed.
+     */
+    public boolean bPressed() {
+        return b.isActive();
     }
     
     /**
